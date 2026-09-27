@@ -1,38 +1,63 @@
-Role Name
-=========
+# microsoft.domain_builder.ad_users
 
-A brief description of the role goes here.
+Create and enable Active Directory administrator and general-user accounts in
+separate OUs. Administrator accounts are added to `Domain Admins`; general-user
+accounts are added to `Domain Users`. Each account's name and SAM account name
+come from `user_name`, and its UPN is `user_name@ad_domain`.
 
-Requirements
-------------
+The role ensures listed accounts are present. Removing an account from a list or
+disabling a creation branch does not delete existing accounts or revoke membership.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Requirements
 
-Role Variables
---------------
+- An existing Active Directory domain and the destination OUs.
+- A Windows management host with the Active Directory PowerShell module, such as
+  a domain controller, and an Ansible connection account permitted to manage the
+  users and group memberships. The role uses the connection's security context.
+- The `microsoft.ad` collection installed on the controller.
+- Gathered Windows facts (`gather_facts: true`).
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+There are no automatic role dependencies. Run `ad_ous` first when using its default
+user OU hierarchy.
 
-Dependencies
-------------
+## Variables
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Defaults are defined in [defaults/main.yml](defaults/main.yml).
 
-Example Playbook
-----------------
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `add_admins` | `true` | Run the administrator-account tasks. |
+| `add_users` | `true` | Run the general-user tasks. |
+| `ad_domain` | `example.com` | UPN suffix for all listed accounts. |
+| `ad_ou_short` | `example` | First domain component used in default OU paths. |
+| `ad_tld` | `com` | Final domain component used in default OU paths. |
+| `priv_users_ou` | `OU=myPrivilegedUsers,OU=myUsers,DC={{ ad_ou_short }},DC={{ ad_tld }}` | Destination OU for administrator accounts. |
+| `users_ou` | `OU=myGeneralUsers,OU=myUsers,DC={{ ad_ou_short }},DC={{ ad_tld }}` | Destination OU for general users. |
+| `domain_admins` | One example account, `myda` | List of objects with required `user_name` and `user_pwd` fields. |
+| `domain_users` | One example account, `mydu` | List of objects with required `user_name` and `user_pwd` fields. |
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Both account lists include example passwords. Replace them with your own lists
+and encrypted secrets before running the role. Both user-creation tasks use
+`no_log: true`. For domains with more than two components, override both OU paths
+as needed; changing `ad_domain` does not change those paths.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Example
 
-License
--------
+Define `vault_domain_admins` and `vault_domain_users` in encrypted `vault.yml`, each
+as a list of `user_name` and `user_pwd` objects. Use empty lists or set the matching
+`add_*` flag to `false` for account types you do not want to manage.
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+```yaml
+- name: Create domain accounts
+  hosts: domain_controllers
+  gather_facts: true
+  vars_files:
+    - vault.yml
+  roles:
+    - role: microsoft.domain_builder.ad_users
+      ad_domain: corp.example.com
+      priv_users_ou: OU=myPrivilegedUsers,OU=myUsers,DC=corp,DC=example,DC=com
+      users_ou: OU=myGeneralUsers,OU=myUsers,DC=corp,DC=example,DC=com
+      domain_admins: "{{ vault_domain_admins }}"
+      domain_users: "{{ vault_domain_users }}"
+```
