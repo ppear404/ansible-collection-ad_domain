@@ -1,0 +1,10 @@
+---
+  
+- name: Configure DNS client
+  ansible.windows.win_dns_client:
+    adapter_names: "*"
+    dns_servers:
+      - "{{ dns_primary }}"
+      - "{{ dns_secondary }}"
+    suffix_search_list:
+      - "{{ ad_domain }}"

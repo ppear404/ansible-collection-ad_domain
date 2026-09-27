@@ -1,0 +1,23 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for ad_join
+- name: Assert that managed host is running Windows
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Windows"
+    fail_msg: "This role is intended to be run on Windows hosts only."
+
+- name: Disable IPv6
+  ansible.builtin.include_tasks: disable_ipv6.yml
+
+- name: Disable Windows Firewall
+  ansible.builtin.include_tasks: disable_firewall.yml
+
+- name: Set DNS servers and search suffix for all adapters
+  ansible.builtin.include_tasks: setdns_netadapter.yml
+
+- name: Add {{ ad_domain }} to hosts file
+  ansible.builtin.include_tasks: hosts_file.yml
+
+- name: Join {{ ad_domain }} domain
+  ansible.builtin.include_tasks: join_domain.yml

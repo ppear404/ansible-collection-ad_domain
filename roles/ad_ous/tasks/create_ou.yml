@@ -1,0 +1,9 @@
+---
+# Create Organizational Units in Active Directory
+  
+- name: Create Organizational Units
+  microsoft.ad.ou:
+    name: "{{ item.name }}"
+    path: "{{ item.path }}"
+    state: present
+  loop: "{{ ad_organizational_units }}"

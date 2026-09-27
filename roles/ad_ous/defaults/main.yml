@@ -1,0 +1,47 @@
+---
+# defaults file for ad_ous
+
+# The short name of the domain without the top-level domain (TLD). e.g "mydomain"
+ad_ou_short: "example"
+# The top-level domain (TLD) of the domain. e.g. "com"
+ad_tld: "com"
+
+# organizational units to create in Active Directory. Add or remove, applied in a loop task.
+ad_organizational_units:
+
+  - name: myUsers
+    path: "DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myPrivilegedUsers
+    path: "OU=myUsers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myGeneralUsers
+    path: "OU=myUsers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myGroups
+    path: "DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myComputers
+    path: "DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myServiceAccounts
+    path: "DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myServers
+    path: "DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myLinux
+    path: "OU=myServers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myWindows
+    path: "OU=myServers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myWorkstations
+    path: "DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myFinance
+    path: "OU=myWorkstations,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+  - name: myOperations
+    path: "OU=myWorkstations,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+

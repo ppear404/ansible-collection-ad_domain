@@ -1,0 +1,13 @@
+---
+# Join windows systems to the domain
+
+- name: join host to active directory domain with automatic reboot
+  microsoft.ad.membership:
+    dns_domain_name: "{{ ad_domain }}"
+    hostname: "{{ ansible_hostname }}"
+    domain_admin_user: "{{ domain_admin }}"
+    domain_admin_password: "{{ vault_domain_admin_password }}"
+    domain_ou_path: "{{ domain_ou_path }}"
+    state: domain
+    reboot: true
+  no_log: false

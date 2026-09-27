@@ -1,0 +1,8 @@
+---
+# Manage hosts file on windows systems
+
+- name: Add {{ ad_domain }} to etc hosts file
+  ansible.windows.win_hosts:
+    state: present
+    canonical_name: "{{ ad_domain }}"
+    ip_address: "{{ dns_primary }}"

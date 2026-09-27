@@ -1,0 +1,13 @@
+---
+# ad_forest role tasks/main.yml
+- name: Assert that managed host is running Windows
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Windows"
+    fail_msg: "This role is intended to be run on Windows hosts only."
+
+- name: Install Active Directory Domain Services
+  ansible.builtin.include_tasks: install_adforest.yml
+
+- name: Configure DNS Forward Lookup Zone
+  ansible.builtin.include_tasks: dns_fwd_lookup.yml

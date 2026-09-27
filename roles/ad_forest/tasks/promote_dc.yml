@@ -1,0 +1,10 @@
+# Promote additional domain controllers
+
+- name: Ensure a server is a domain controller
+  microsoft.ad.domain_controller:
+    dns_domain_name: "{{ dns_domain }}"
+    domain_admin_user: "{{ domain_admin }}"
+    domain_admin_password: "{{ vault_domain_admin_password }}"
+    safe_mode_password: "{{ safemodepass }}"
+    state: domain_controller
+    reboot: true

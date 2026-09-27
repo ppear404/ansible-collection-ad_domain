@@ -1,0 +1,8 @@
+---
+- name: Ensure AD DNS forward lookup zone is present
+  ansible.windows.win_dns_zone:
+    name: "{{ dns_domain }}"
+    type: primary
+    replication: domain
+    dynamic_update: secure
+    state: present

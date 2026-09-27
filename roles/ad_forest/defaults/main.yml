@@ -1,0 +1,10 @@
+---
+# defaults file for ad_forest
+
+# The fqdn of the domain to be created. This is the name of the forest root domain.
+dns_domain: "example.com"
+
+# secrets, store securely
+safemodepass: "s@f31m0d32p@wd"
+domain_admin: "myda@example.com"
+vault_domain_admin_password: "sup3rSecre3tpa$$"

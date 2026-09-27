@@ -1,0 +1,9 @@
+---
+# Add a new domain to a new forest on the target host
+
+- name: Create new domain in a new forest on the target host and reboot
+  microsoft.ad.domain:
+    dns_domain_name: "{{ dns_domain }}"
+    safe_mode_password: "{{ safemodepass }}"
+    install_dns: true
+    reboot: true

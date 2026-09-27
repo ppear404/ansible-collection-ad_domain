@@ -1,0 +1,10 @@
+---
+# ad_ou role tasks/main.yml
+- name: Assert that managed host is running Windows
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Windows"
+    fail_msg: "This role is intended to be run on Windows hosts only."
+
+- name: Create Organizational Units in Active Directory
+  ansible.builtin.include_tasks: create_ou.yml

@@ -1,0 +1,17 @@
+---
+#Create domain admins
+
+- name: Create domain users in default ou
+  microsoft.ad.user:
+    name: "{{ item.user_name }}"
+    sam_account_name: "{{ item.user_name }}"
+    upn: "{{ item.user_name }}@{{ ad_domain }}"
+    password: "{{ item.user_pwd }}"
+    state: present
+    enabled: true
+    path: "{{ users_ou }}"
+    groups:
+      add:
+        - Domain Users
+  loop: "{{ domain_users }}"
+  no_log: true

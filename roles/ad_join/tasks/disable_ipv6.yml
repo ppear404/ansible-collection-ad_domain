@@ -1,0 +1,5 @@
+---
+# Disable ipv6 on windows systems.
+
+- name: Disable ipv6 on managed host(s)
+  ansible.windows.win_shell: Disable-NetAdapterBinding -Name "*" -ComponentID ms_tcpip6

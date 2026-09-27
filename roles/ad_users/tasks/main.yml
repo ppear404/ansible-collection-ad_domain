@@ -1,0 +1,15 @@
+---
+# ad_users tasks/main.yml
+- name: Assert that managed host is running Windows
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Windows"
+    fail_msg: "This role is intended to be run on Windows hosts only."
+
+- name: Create domain admins
+  ansible.builtin.include_tasks: domain_admins.yml
+  when: add_admins | bool
+
+- name: Create domain users
+  ansible.builtin.include_tasks: domain_users.yml
+  when: add_users | bool

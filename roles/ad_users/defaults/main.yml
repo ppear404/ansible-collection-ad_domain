@@ -1,0 +1,21 @@
+---
+# defaults file for ad_users;
+priv_users_ou: "OU=myPrivilegedUsers,OU=myUsers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+users_ou: "OU=myGeneralUsers,OU=myUsers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+# variables to control the creation of domain admins and users
+add_admins: true
+add_users: true
+
+ad_domain: "example.com"
+ad_ou_short: "example"
+ad_tld: com
+
+#move to secrets vault when ready
+domain_admins:
+  - user_name: myda
+    user_pwd: "2026-Secure!LongerPassword#17"
+
+domain_users:
+  - user_name: mydu
+    user_pwd: "2026-Secure!LongPassword#24"

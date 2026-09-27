@@ -1,0 +1,16 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ad_join
+ad_domain: "example.com"
+# OU path for the computer account to be created in AD.  This is optional and can be left blank to use the default Computers container.
+ad_ou_short: "example"
+ad_tld: "com"
+domain_ou_path: "OU=myWindows,OU=myServers,DC={{ ad_ou_short }},DC={{ ad_tld }}"
+
+dns_primary: 192.168.1.10
+dns_secondary: 192.168.1.11
+
+
+# move to group_vars/all/vault.yml and encrypt with ansible-vault
+domain_admin: "myda@example.com"
+vault_domain_admin_password: "sup3rSecre3tpa$$"
